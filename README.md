@@ -7,7 +7,7 @@ Github watcher is a simple and useful gem that help you to constantly monitor yo
 * Number of issues change
 * Repo was updated
 
-It uses [ruby forever](https://github.com/DAddYE/forever) to demonize the process.
+It uses [foreverb](https://github.com/DAddYE/foreverb) to demonize the process.
 
 ## Prerequisites
 
