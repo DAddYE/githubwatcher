@@ -63,4 +63,16 @@ Restart the deamon
 githubwatcher start
 ```
 
+## Working with Ruby Forever
+
+```
+$ foreverb list
+PID    RSS    CPU  CMD
+12494  27132  0.2  Forever: /usr/bin/githubwatcher
+
+$ foreverb stop github
+Do you want really stop Forever: /usr/bin/githubwatcher  with pid 12494? y
+Killing process Forever: /usr/bin/githubwatcher  with pid 12494...
+```
+
 Your are done!

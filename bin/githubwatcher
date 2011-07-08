@@ -13,6 +13,8 @@ Forever.run do
   # pid  "bar.pid" # Default: File.expand_path(dir, '/tmp/[file_name].pid')
   #
 
+  dir File.expand_path('~/.githubwatcher')
+
   on_error do |e|
     Mail.deliver do
       delivery_method :sendmail, :location => `which sendmail`.chomp
