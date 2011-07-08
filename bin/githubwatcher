@@ -1,0 +1,31 @@
+#!/usr/bin/ruby
+require 'rubygems' unless defined?(Gem)
+require 'forever'
+require 'mail'
+
+Forever.run do
+  ##
+  # You can set these values
+  #
+  # dir  "foo"     # Default: File.expand_path('../../', __FILE__)
+  # file "bar"     # Default: __FILE__
+  # log  "bar.log" # Default: File.expand_path(dir, '/log/[file_name].log')
+  # pid  "bar.pid" # Default: File.expand_path(dir, '/tmp/[file_name].pid')
+  #
+
+  on_error do |e|
+    Mail.deliver do
+      delivery_method :sendmail, :location => `which sendmail`.chomp
+      to      "d.dagostino@lipsiasoft.com"
+      from    "exceptions@lipsiasoft.com"
+      subject "[GitHub Watcher] #{e.message}"
+      body    "%s\n  %s" % [e.message, e.backtrace.join("\n  ")]
+    end
+  end
+
+  on_ready do
+    require 'bundler/setup'
+    require 'githubwatcher'
+    Githubwatcher.start!
+  end
+end
