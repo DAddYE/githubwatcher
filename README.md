@@ -9,6 +9,8 @@ Github watcher is a simple and useful gem that help you to constantly monitor yo
 
 It uses [foreverb](https://github.com/DAddYE/foreverb) to demonize the process.
 
+A [demonstration video is here](http://www.daddye.it/post/7275490125/github-growl)
+
 ## Prerequisites
 
 You need to have **growlnotify** installed. To do that you can install it through official [site](http://growl.info) or
@@ -33,7 +35,7 @@ with your favorite editor.
 
 Should look like this (if you have ran ```githubwatcher start```)
 
-``` yml
+``` yaml
 ---
 - daddye/all
 - padrino/all
@@ -41,7 +43,7 @@ Should look like this (if you have ran ```githubwatcher start```)
 
 So if for example you want to watch [sinatra](https://github.com/sinatra/sinatra) add it, the result should look like:
 
-``` yml
+``` yaml
 ---
 - daddye/all
 - padrino/all
@@ -50,7 +52,7 @@ So if for example you want to watch [sinatra](https://github.com/sinatra/sinatra
 
 If you want to watch **all** repositories of a given user you simply provide **/all** so will look like:
 
-``` yml
+``` yaml
 ---
 - daddye/all
 - padrino/all
@@ -59,13 +61,13 @@ If you want to watch **all** repositories of a given user you simply provide **/
 
 Restart the deamon
 
-```
-githubwatcher start
+``` sh
+$ githubwatcher start
 ```
 
 ## Working with Ruby Forever
 
-```
+``` sh
 $ foreverb list
 PID    RSS    CPU  CMD
 12494  27132  0.2  Forever: /usr/bin/githubwatcher
