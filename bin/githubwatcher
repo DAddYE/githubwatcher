@@ -1,7 +1,8 @@
 #!/usr/bin/ruby
 require 'rubygems' unless defined?(Gem)
 require 'forever'
-require 'mail'
+require 'bundler/setup'
+require 'githubwatcher'
 
 Forever.run do
   ##
@@ -16,18 +17,10 @@ Forever.run do
   dir File.expand_path('~/.githubwatcher')
 
   on_error do |e|
-    Mail.deliver do
-      delivery_method :sendmail, :location => `which sendmail`.chomp
-      to      "d.dagostino@lipsiasoft.com"
-      from    "exceptions@lipsiasoft.com"
-      subject "[GitHub Watcher] #{e.message}"
-      body    "%s\n  %s" % [e.message, e.backtrace.join("\n  ")]
-    end
+    Githubwatcher.notify("Error!", e.message)
   end
 
   on_ready do
-    require 'bundler/setup'
-    require 'githubwatcher'
     Githubwatcher.start!
   end
 end

@@ -19,6 +19,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.add_dependency 'httparty', '~>0.7.8'
   s.add_dependency 'growl',    '~>1.0.3'
-  s.add_dependency 'foreverb', '~>0.1.6'
-  s.add_dependency 'mail',     '~>2.3.0'
+  s.add_dependency 'foreverb', '~>0.1.7'
 end

@@ -7,7 +7,7 @@ module Githubwatcher
   include HTTParty
 
   WATCH = File.expand_path("~/.githubwatcher/repos.yaml")
-  DB    = File.expand_path("~/.githubwatcher/db.yaml", __FILE__)
+  DB    = File.expand_path("~/.githubwatcher/db.yaml")
 
   base_uri 'https://api.github.com'
   format :json
