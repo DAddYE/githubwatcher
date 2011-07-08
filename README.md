@@ -78,3 +78,7 @@ Killing process Forever: /usr/bin/githubwatcher  with pid 12494...
 ```
 
 Your are done!
+
+## Author
+
+DAddYE, you can follow me on twitter [@daddye](http://twitter.com/daddye)
