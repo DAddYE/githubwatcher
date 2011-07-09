@@ -37,8 +37,9 @@ module Githubwatcher
 
           found = repos_was.find { |r| r["name"] == repo["name"] }
 
+          repo_fullname = [repo['owner']['login'],repo['name']].join('/')
           if !found
-            notify(repo["name"], "Was created")
+            notify(repo_fullname, "Was created")
             repos_was << repo
             repos << repo
           end
@@ -46,22 +47,22 @@ module Githubwatcher
           repo_was = repos_was.find { |r| r["name"] == repo["name"] }
 
           if repo_was["watchers"] != repo["watchers"]
-            notify(repo["name"], "Has new #{repo["watchers"]-repo_was["watchers"]} watchers")
+            notify(repo_fullname, "Has new #{repo["watchers"]-repo_was["watchers"]} watchers")
             repo_was["watchers"] = repo["watchers"]
           end
 
           if repo_was["open_issues"] != repo["open_issues"]
-            notify(repo["name"], "Has new #{repo["open_issues"]-repo_was["open_issues"]} open issues")
+            notify(repo_fullname, "Has new #{repo["open_issues"]-repo_was["open_issues"]} open issues")
             repo_was["open_issues"] = repo["open_issues"]
           end
 
           if repo_was["pushed_at"] != repo["pushed_at"]
-            notify(repo["name"], "Was updated!")
+            notify(repo_fullname, "Was updated!")
             repo_was["pushed_at"] = repo["pushed_at"]
           end
 
           if repo_was["forks"] != repo["forks"]
-            notify(repo["name"], "Has new #{repo["forks"]-repo_was["forks"]} forks")
+            notify(repo_fullname, "Has new #{repo["forks"]-repo_was["forks"]} forks")
             repo_was["forks"] = repo["forks"]
           end
 
