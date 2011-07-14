@@ -20,11 +20,15 @@ Forever.run do
   end
 
   on_ready do
-    Githubwatcher.start!
+    Githubwatcher.setup
+    Githubwatcher.notify("GitHub Watcher", "was started...")
   end
 
-  every 60.seconds do
-    puts "Restarting, to clean up our memory"
-    system Gem.ruby, __FILE__
+  on_exit do
+    Githubwatcher.notify("GitHub Watcher", "was stopped...")
+  end
+
+  every 5.seconds do
+    Githubwatcher.run
   end
 end
