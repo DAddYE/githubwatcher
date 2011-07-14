@@ -1,6 +1,9 @@
+require 'yaml' unless defined?(YAML)
 require "githubwatcher/version"
 require "httparty"
 require "growl"
+
+YAML::ENGINE.yamler = "syck" if defined?(YAML::ENGINE)
 
 module Githubwatcher
   extend self
