@@ -35,6 +35,14 @@ with your favorite editor.
 
 Should look like this (if you have ran ```githubwatcher start```)
 
+We provide a `config` command to easily edit it.
+
+``` sh
+$ githubwatcher config
+```
+
+It will open in texmate or vim this:
+
 ``` yaml
 ---
 - daddye/all
@@ -62,7 +70,7 @@ If you want to watch **all** repositories of a given user you simply provide **/
 Restart the deamon
 
 ``` sh
-$ githubwatcher start
+$ githubwatcher restart
 ```
 
 ## Working with Ruby Forever

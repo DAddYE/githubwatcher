@@ -1,19 +1,18 @@
 #!/usr/bin/ruby
+$: << File.expand_path('../../lib', __FILE__) # For unknow reason bundler don't always add this path
 require 'rubygems' unless defined?(Gem)
 require 'forever'
 require 'bundler/setup'
 require 'githubwatcher'
 
-Forever.run do
-  ##
-  # You can set these values
-  #
-  # dir  "foo"     # Default: File.expand_path('../../', __FILE__)
-  # file "bar"     # Default: __FILE__
-  # log  "bar.log" # Default: File.expand_path(dir, '/log/[file_name].log')
-  # pid  "bar.pid" # Default: File.expand_path(dir, '/tmp/[file_name].pid')
-  #
+if ARGV.any? { |cmd| cmd =~ /config(?:ure)?/i }
+  editor = `which mate`.chomp! || `which vim`.chomp!
+  puts "Im unable to find an editor, open manually ~/.githubwatcher/repos.yaml" and exit unless editor
+  system editor, File.expand_path('~/.githubwatcher/repos.yaml') and exit
+end
 
+Forever.run do
+  # Our working directory, here we store pids/logs and obviously our list of repo to watch
   dir File.expand_path('~/.githubwatcher')
 
   on_error do |e|
@@ -22,5 +21,10 @@ Forever.run do
 
   on_ready do
     Githubwatcher.start!
+  end
+
+  every 60.seconds do
+    puts "Restarting, to clean up our memory"
+    system Gem.ruby, __FILE__
   end
 end
