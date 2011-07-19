@@ -87,6 +87,11 @@ Killing process Forever: /usr/bin/githubwatcher  with pid 12494...
 
 Your are done!
 
+## Using a different API
+
+Simply edit ```~/.githubwatcher/api.yaml``` and set a custom url and api version. If you are using GitHub:FI the
+version has to be v2 for now.
+
 ## Author
 
 DAddYE, you can follow me on twitter [@daddye](http://twitter.com/daddye)
