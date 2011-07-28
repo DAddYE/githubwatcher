@@ -87,6 +87,11 @@ Killing process Forever: /usr/bin/githubwatcher  with pid 12494...
 
 Your are done!
 
+## Hacks
+
+In some env you use `sudo gem install`, so in this case the first time you launch the app use `sudo`,
+in this way will be generated the `Gemfile.lock`, in future you will be able to run it without `sudo`.
+
 ## Author
 
 DAddYE, you can follow me on twitter [@daddye](http://twitter.com/daddye)
