@@ -9,15 +9,20 @@ module Githubwatcher
   extend self
   include HTTParty
 
+  API   = File.expand_path("~/.githubwatcher/api.yaml")
   WATCH = File.expand_path("~/.githubwatcher/repos.yaml")
   DB    = File.expand_path("~/.githubwatcher/db.yaml")
 
-  base_uri 'https://api.github.com'
   format :json
 
   def setup
     raise "You need to install growlnotify, use brew install growlnotify or install it from growl.info site" unless Growl.installed?
     puts "Starting GitHub Watcher..."
+
+    unless File.exist?(API)
+      Dir.mkdir(File.dirname(API)) unless File.exist?(File.dirname(WATCH))
+      File.open(API, "w") { |f| f.write ["https://api.github.com", "v3"].to_yaml }
+    end
 
     unless File.exist?(WATCH)
       warn "Add the repositories you're willing to monitor editing: ~/.githubwatcher/repos.yaml"
@@ -27,13 +32,16 @@ module Githubwatcher
 
     @_watch = YAML.load_file(WATCH)
     @_repos = YAML.load_file(DB) if File.exist?(DB)
+    @base_uri, @api_version = YAML.load_file(API)
+
+    base_uri @base_uri
   end
 
   def start!
     repos_was = repos.dup
     watch.each do |value|
       key, value = *value.split("/")
-      r = get "/users/%s/repos" % key
+      r = get_repositories(key)
       r.each do |repo|
         next unless value.include?(repo["name"]) || value.include?("all")
         puts "Quering #{repo["git_url"]}..."
@@ -88,5 +96,21 @@ module Githubwatcher
   def notify(title, text)
     Growl.notify text, :title => title, :icon => File.expand_path("../../images/icon.png", __FILE__); sleep 0.2
     puts "=> #{title}: #{text}"
+  end
+
+  def get_repositories(key)
+    r = get resource_url(key)
+    @api_version == "v3" ? r : r["repositories"]
+  end
+
+  def resource_url(key)
+    case @api_version
+      when "v3"
+        "/users/%s/repos" % key
+      when "v2"
+        "/api/v2/json/repos/show/%s" % key
+      else
+        raise "Unkown api version"
+    end
   end
 end

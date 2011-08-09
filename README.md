@@ -73,6 +73,11 @@ Restart the deamon
 $ githubwatcher restart
 ```
 
+## Using a different API
+
+Simply edit `~/.githubwatcher/api.yaml` and set a custom url and api version. If you are using GitHub:FI the
+version has to be v2 for now.
+
 ## Working with Ruby Forever
 
 ``` sh
