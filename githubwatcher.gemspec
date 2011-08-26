@@ -15,9 +15,9 @@ Gem::Specification.new do |s|
 
   s.files         = Dir["**/*"].reject { |f| File.directory?(f) || f == "Gemfile.lock" }
   s.test_files    = []
-  s.executables   = %w(githubwatcher)
-  s.require_paths = ["lib"]
+  s.executables   = %w[githubwatcher]
+  s.require_paths = %w[lib]
   s.add_dependency 'httparty', '~>0.7.8'
   s.add_dependency 'growl',    '~>1.0.3'
-  s.add_dependency 'foreverb', '~>0.2.3'
+  s.add_dependency 'foreverb', '~>0.2.6'
 end
