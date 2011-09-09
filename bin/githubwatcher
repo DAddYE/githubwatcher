@@ -6,10 +6,15 @@ require 'bundler/setup'
 require 'forever'
 require 'githubwatcher'
 
-if ARGV.any? { |cmd| cmd =~ /configure/ }
-  editor = `which mate`.chomp! || `which vim`.chomp!
-  puts "Im unable to find an editor, open manually ~/.githubwatcher/repos.yaml" and exit unless editor
-  system editor, File.expand_path('~/.githubwatcher/repos.yaml') and exit
+while ARGV.size > 0
+  case arg = ARGV.shift
+    when "configure"
+      editor = `which mate`.chomp! || `which vim`.chomp!
+      puts "Im unable to find an editor, open manually ~/.githubwatcher/repos.yaml" and exit unless editor
+      system editor, File.expand_path('~/.githubwatcher/repos.yaml') and exit
+    when "reset"
+      system "rm -rf ~/.githubwatcher"
+  end
 end
 
 Forever.run do
@@ -17,16 +22,19 @@ Forever.run do
   dir File.expand_path('~/.githubwatcher')
 
   on_error do |e|
-    Githubwatcher.notify("Error!", e.message)
+    unless (@_errors ||= []).include?(e.message)
+      Githubwatcher.notify("Error!", e.message, false)
+      @_errors << e.message
+    end
   end
 
   on_ready do
     Githubwatcher.setup
-    Githubwatcher.notify("GitHub Watcher", "was started...")
+    Githubwatcher.notify("GitHub Watcher", "was started...", false)
   end
 
   on_exit do
-    Githubwatcher.notify("GitHub Watcher", "was stopped...")
+    Githubwatcher.notify("GitHub Watcher", "was stopped...", false)
   end
 
   every 5.seconds do

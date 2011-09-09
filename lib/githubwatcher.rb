@@ -93,8 +93,8 @@ module Githubwatcher
     @_watch ||= []
   end
 
-  def notify(title, text)
-    Growl.notify text, :title => title, :icon => File.expand_path("../../images/icon.png", __FILE__); sleep 0.2
+  def notify(title, text, sticky=true)
+    Growl.notify(text, :title => title, :icon => File.expand_path("../../images/icon.png", __FILE__), :sticky => sticky); sleep 0.2
     puts "=> #{title}: #{text}"
   end
 
