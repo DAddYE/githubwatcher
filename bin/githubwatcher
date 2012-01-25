@@ -1,43 +1,36 @@
 #!/usr/bin/ruby
-ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-
+$:.unshift File.expand_path('../../lib', __FILE__)
 require 'rubygems' unless defined?(Gem)
-require 'bundler/setup'
 require 'forever'
 require 'githubwatcher'
 
-while ARGV.size > 0
-  case arg = ARGV.shift
-    when "configure"
-      editor = `which mate`.chomp! || `which vim`.chomp!
-      puts "Im unable to find an editor, open manually ~/.githubwatcher/repos.yaml" and exit unless editor
-      system editor, File.expand_path('~/.githubwatcher/repos.yaml') and exit
-    when "reset"
-      system "rm -rf ~/.githubwatcher"
-  end
+case arg = ARGV[0]
+  when "configure"
+    editor = `which mate`.chomp! || `which vim`.chomp!
+    puts "Im unable to find an editor, open manually ~/.githubwatcher/repos.yaml" and exit unless editor
+    system editor, File.expand_path('~/.githubwatcher/repos.yaml') and exit
+  when "reset"
+    system "rm -rf ~/.githubwatcher"
 end
 
 Forever.run do
-  # Our working directory, here we store pids/logs and obviously our list of repo to watch
   dir File.expand_path('~/.githubwatcher')
 
   on_error do |e|
-    unless (@_errors ||= []).include?(e.message)
-      Githubwatcher.notify("Error!", e.message, false)
-      @_errors << e.message
-    end
+    Githubwatcher.notify("Error!", e.message) unless @_errors.include?(e.message)
   end
 
-  on_ready do
+  before :all do
     Githubwatcher.setup
-    Githubwatcher.notify("GitHub Watcher", "was started...", false)
-  end
-
-  on_exit do
-    Githubwatcher.notify("GitHub Watcher", "was stopped...", false)
+    Githubwatcher.notify("GitHub Watcher", "was started...")
+    @_errors = [] # Store common errors
   end
 
   every 5.seconds do
     Githubwatcher.run
+  end
+
+  after :all do
+    Githubwatcher.notify("GitHub Watcher", "was stopped...")
   end
 end

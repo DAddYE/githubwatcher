@@ -31,8 +31,8 @@ module Githubwatcher
     end
 
     @_watch = YAML.load_file(WATCH)
-    @_repos = YAML.load_file(DB) if File.exist?(DB)
     @base_uri, @api_version = YAML.load_file(API)
+    @_repos   = YAML.load_file(DB) if File.exist?(DB)
 
     base_uri @base_uri
   end
@@ -93,7 +93,7 @@ module Githubwatcher
     @_watch ||= []
   end
 
-  def notify(title, text, sticky=true)
+  def notify(title, text, sticky=false)
     Growl.notify(text, :title => title, :icon => File.expand_path("../../images/icon.png", __FILE__), :sticky => sticky); sleep 0.2
     puts "=> #{title}: #{text}"
   end
