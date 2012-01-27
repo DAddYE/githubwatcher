@@ -17,13 +17,16 @@ Forever.run do
   dir File.expand_path('~/.githubwatcher')
 
   on_error do |e|
-    Githubwatcher.notify("Error!", e.message) unless @_errors.include?(e.message)
+    unless @_errors.include?(e.message)
+      @_errors << e.message
+      Githubwatcher.notify("Error!", e.message)
+    end
   end
 
   before :all do
+    @_errors = [] # Store common errors
     Githubwatcher.setup
     Githubwatcher.notify("GitHub Watcher", "was started...")
-    @_errors = [] # Store common errors
   end
 
   every 5.seconds do

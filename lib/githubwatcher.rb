@@ -1,13 +1,14 @@
 require 'yaml' unless defined?(YAML)
-require "githubwatcher/version"
-require "httparty"
-require "growl"
+require 'githubwatcher/version'
+require 'httparty'
+require 'notifier'
 
 YAML::ENGINE.yamler = "syck" if defined?(YAML::ENGINE)
 
 module Githubwatcher
   extend self
   include HTTParty
+  include Notifier
 
   API   = File.expand_path("~/.githubwatcher/api.yaml")
   WATCH = File.expand_path("~/.githubwatcher/repos.yaml")
@@ -16,7 +17,6 @@ module Githubwatcher
   format :json
 
   def setup
-    raise "You need to install growlnotify, use brew install growlnotify or install it from growl.info site" unless Growl.installed?
     puts "Starting GitHub Watcher..."
 
     unless File.exist?(API)
@@ -94,7 +94,7 @@ module Githubwatcher
   end
 
   def notify(title, text, sticky=false)
-    Growl.notify(text, :title => title, :icon => File.expand_path("../../images/icon.png", __FILE__), :sticky => sticky); sleep 0.2
+    Growl.notify(:message => text, :title => title, :image => File.expand_path("../../images/icon.png", __FILE__)); sleep 0.2
     puts "=> #{title}: #{text}"
   end
 
